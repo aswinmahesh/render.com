@@ -3,7 +3,7 @@ services:
     type: web
     env: docker
     repo: https://github.com/aswinmahesh/vaultwarden.git
-    plan: starter
+    plan: free
     #httpPort: 80
     envVars:
       - key: DATABASE_URL
@@ -13,7 +13,7 @@ services:
     type: web
     env: docker
     repo: https://github.com/aswinmahesh/mariadb.git
-    plan: starter
+    plan: free
     envVars:
       - key: MYSQL_DATABASE
         value: vaultwarden
