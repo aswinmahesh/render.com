@@ -4,7 +4,7 @@ services:
     env: docker
     repo: vaultwarden/server:latest
     plan: starter
-    httpPort: 80
+    #httpPort: 80
     envVars:
       - key: DATABASE_URL
         value: mysql://vaultwarden:mysecretpassword@mysql:3306/vaultwarden
@@ -26,7 +26,7 @@ databases:
   - name: mysql
     type: mysql
     plan: starter
-    version: latest
+    #version: latest
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         value: mysecretpassword
