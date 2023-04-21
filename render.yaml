@@ -2,7 +2,7 @@ services:
   - name: vaultwarden
     type: web
     env: docker
-    repo: docker.io/vaultwarden/server:latest
+    repo: ghcr.io/vaultwarden/server:latest
     plan: starter
     #httpPort: 80
     envVars:
