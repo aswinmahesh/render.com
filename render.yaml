@@ -1,0 +1,63 @@
+services:
+  - type: docker
+    name: vaultwarden
+    env: docker
+    repo: vaultwarden/server:latest
+    plan: starter
+    port: 80
+    envVars:
+      - key: DATABASE_URL
+        value: mysql://vaultwarden:mysecretpassword@mysql:3306/vaultwarden
+
+  - type: docker
+    name: mysql
+    env: docker
+    repo: mariadb:latest
+    plan: starter
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: mysecretpassword
+      - key: MYSQL_DATABASE
+        value: vaultwarden
+      - key: MYSQL_USER
+        value: vaultwarden
+      - key: MYSQL_PASSWORD
+        value: mysecretpassword
+
+databases:
+  - name: mysql
+    plan: starter
+    engine: mysql
+    version: latest
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        fromService:
+          type: docker
+          name: mysql
+          property: env
+          subproperty: MYSQL_ROOT_PASSWORD
+      - key: MYSQL_DATABASE
+        fromService:
+          type: docker
+          name: mysql
+          property: env
+          subproperty: MYSQL_DATABASE
+      - key: MYSQL_USER
+        fromService:
+          type: docker
+          name: mysql
+          property: env
+          subproperty: MYSQL_USER
+      - key: MYSQL_PASSWORD
+        fromService:
+          type: docker
+          name: mysql
+          property: env
+          subproperty: MYSQL_PASSWORD
+
+    allowAccess:
+      - fromService:
+          type: docker
+          name: vaultwarden
+          property: env
+          subproperty: DATABASE_URL
