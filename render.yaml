@@ -2,7 +2,7 @@ services:
   - name: vaultwarden
     type: web
     env: docker
-    repo: ghcr.io/vaultwarden/server:latest
+    repo: https://github.com/aswinmahesh/vaultwarden.git
     plan: starter
     #httpPort: 80
     envVars:
@@ -12,7 +12,7 @@ services:
   - name: mysql
     type: web
     env: docker
-    repo: docker.io/mariadb:latest
+    repo: https://github.com/aswinmahesh/mariadb.git
     plan: starter
     envVars:
       - key: MYSQL_DATABASE
