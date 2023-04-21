@@ -27,7 +27,7 @@ services:
 databases:
   - name: mysql
     plan: starter
-    engine: mysql
+    type: mysql
     version: latest
     envVars:
       - key: MYSQL_ROOT_PASSWORD
@@ -56,8 +56,6 @@ databases:
           subproperty: MYSQL_PASSWORD
 
     allowAccess:
-      - fromService:
-          type: web
-          name: vaultwarden
-          property: env
-          subproperty: DATABASE_URL
+      - service: vaultwarden
+        property: env
+        subproperty: DATABASE_URL
