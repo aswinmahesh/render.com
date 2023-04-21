@@ -1,18 +1,33 @@
 services:
-  - type: docker
+  - type: web
     name: vaultwarden
-    env: docker
-    repo: vaultwarden/server:latest
     plan: starter
-    port: 80
     envVars:
       - key: DATABASE_URL
         value: mysql://vaultwarden:mysecretpassword@mysql:3306/vaultwarden
-
-  - type: docker
+    startCommand: /start.sh
+    buildCommand: /build.sh
+    github:
+      repo: vaultwarden/vaultwarden
+      branch: master
+    env:
+      - key: ROCKET_ADDRESS
+        value: "0.0.0.0"
+      - key: ROCKET_PORT
+        value: "8080"
+      - key: TZ
+        value: "UTC"
+    ports:
+      - port: 80
+        protocol: http
+        healthCheck:
+          path: /health
+          method: GET
+          protocol: http
+          timeoutSeconds: 5
+          periodSeconds: 60
+  - type: worker
     name: mysql
-    env: docker
-    repo: mariadb:latest
     plan: starter
     envVars:
       - key: MYSQL_ROOT_PASSWORD
@@ -23,41 +38,54 @@ services:
         value: vaultwarden
       - key: MYSQL_PASSWORD
         value: mysecretpassword
-
+    github:
+      repo: docker-library/mysql
+      branch: 8.0
+    env:
+      - key: MYSQL_ROOT_PASSWORD
+        value: mysecretpassword
+      - key: MYSQL_DATABASE
+        value: vaultwarden
+      - key: MYSQL_USER
+        value: vaultwarden
+      - key: MYSQL_PASSWORD
+        value: mysecretpassword
+    ports:
+      - port: 3306
+        protocol: tcp
 databases:
   - name: mysql
     plan: starter
     engine: mysql
-    version: latest
+    version: "8.0"
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         fromService:
-          type: docker
+          type: worker
           name: mysql
           property: env
           subproperty: MYSQL_ROOT_PASSWORD
       - key: MYSQL_DATABASE
         fromService:
-          type: docker
+          type: worker
           name: mysql
           property: env
           subproperty: MYSQL_DATABASE
       - key: MYSQL_USER
         fromService:
-          type: docker
+          type: worker
           name: mysql
           property: env
           subproperty: MYSQL_USER
       - key: MYSQL_PASSWORD
         fromService:
-          type: docker
+          type: worker
           name: mysql
           property: env
           subproperty: MYSQL_PASSWORD
-
     allowAccess:
       - fromService:
-          type: docker
+          type: web
           name: vaultwarden
           property: env
           subproperty: DATABASE_URL
