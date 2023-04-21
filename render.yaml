@@ -2,7 +2,7 @@ services:
   - name: vaultwarden
     type: web
     env: docker
-    repo: vaultwarden/server:latest
+    repo: docker.io/vaultwarden/server:latest
     plan: starter
     #httpPort: 80
     envVars:
@@ -12,7 +12,7 @@ services:
   - name: mysql
     type: web
     env: docker
-    repo: mariadb:latest
+    repo: docker.io/mariadb:latest
     plan: starter
     envVars:
       - key: MYSQL_DATABASE
@@ -26,18 +26,21 @@ envVarGroups:
   - name: vaultwarden-env
     envVars:
       - key: DATABASE_URL
+        value:
         fromService:
           name: mysql
           type: web
           property: env
           subproperty: MYSQL_DATABASE
       - key: MYSQL_USER
+        value:
         fromService:
           name: mysql
           type: web
           property: env
           subproperty: MYSQL_USER
       - key: MYSQL_PASSWORD
+        value:
         fromService:
           name: mysql
           type: web
