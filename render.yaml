@@ -22,15 +22,6 @@ services:
       - key: MYSQL_PASSWORD
         value: mysecretpassword
 
-databases:
-  - name: mysql
-    type: mysql
-    plan: starter
-    #version: latest
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        value: mysecretpassword
-
 envVarGroups:
   - name: vaultwarden-env
     envVars:
